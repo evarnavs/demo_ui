@@ -12,6 +12,7 @@ jobs:
     env:
       EMAIL: ${{ secrets.EMAIL }}
       PASSWORD: ${{ secrets.PASSWORD }}
+      BASE_URL: ${{ secrets.BASE_URL }}
 
     steps:
     - name: Checkout code
