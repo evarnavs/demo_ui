@@ -43,6 +43,7 @@ jobs:
     - name: Run tests and generate report
       run: |
         pytest --alluredir=allure-results
+        cp -r allure-results/history allure-results/history || true
         allure generate allure-results -o allure-report --clean
 
     - name: Save new report history
