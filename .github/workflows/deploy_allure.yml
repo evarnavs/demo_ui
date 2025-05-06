@@ -1,0 +1,57 @@
+name: Deploy Allure Report to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      EMAIL: ${{ secrets.EMAIL }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies and Allure
+      run: |
+        pip install -r requirements.txt
+        sudo apt-get update
+        sudo apt-get install -y default-jre
+        curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+        tar -xvzf allure.tgz
+        sudo mv allure-2.27.0 /opt/allure
+        sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+
+    - name: Restore previous history
+      uses: actions/download-artifact@v4
+      with:
+        name: allure-history
+        path: allure-results/history
+      continue-on-error: true
+
+    - name: Run tests and generate report
+      run: |
+        pytest --alluredir=allure-results
+        allure generate allure-results -o allure-report --clean
+
+    - name: Save new report history
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-history
+        path: allure-report/history
+
+    - name: Deploy report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
