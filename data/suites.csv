@@ -1,2 +1,2 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Tue May 06 16:25:55 UTC 2025","Tue May 06 16:26:02 UTC 2025","6610","tests","test_login_flow","","","","Full login flow works","Test checks that user can login after selecting country and language"
+"passed","Tue May 06 16:55:18 UTC 2025","Tue May 06 16:55:25 UTC 2025","7378","tests","test_login_flow","","","","Full login flow works","Test checks that user can login after selecting country and language"
