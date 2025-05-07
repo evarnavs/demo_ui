@@ -1,21 +1,22 @@
 name: Deploy Allure Report to GitHub Pages
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     env:
+      BASE_URL: ${{ secrets.BASE_URL }}
       EMAIL: ${{ secrets.EMAIL }}
       PASSWORD: ${{ secrets.PASSWORD }}
-      BASE_URL: ${{ secrets.BASE_URL }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-    - name: Checkout code
+    - name: Checkout repo
       uses: actions/checkout@v3
 
     - name: Set up Python
@@ -23,7 +24,7 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies and Allure
+    - name: Install dependencies and Allure CLI
       run: |
         pip install -r requirements.txt
         sudo apt-get update
@@ -33,26 +34,30 @@ jobs:
         sudo mv allure-2.27.0 /opt/allure
         sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
-    - name: Restore previous history
-      uses: actions/download-artifact@v4
-      with:
-        name: allure-history
-        path: allure-results/history
-      continue-on-error: true
-
-    - name: Run tests and generate report
+    - name: Download previous Allure history from gh-pages branch
       run: |
-        pytest --alluredir=allure-results
-        cp -r allure-results/history allure-results/history || true
+        git clone --depth=1 --branch gh-pages https://github.com/${{ github.repository }} gh-pages-temp
+        mkdir -p allure-results/history
+        cp -R gh-pages-temp/history/* allure-results/history/ || echo "🟡 No previous history found"
+
+    - name: Run tests and generate Allure report
+      run: |
+        pytest --alluredir=allure-results || true
         allure generate allure-results -o allure-report --clean
 
-    - name: Save new report history
+    - name: Upload Allure report as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: allure-report
+
+    - name: Upload updated Allure history for trend tracking
       uses: actions/upload-artifact@v4
       with:
         name: allure-history
         path: allure-report/history
 
-    - name: Deploy report to GitHub Pages
+    - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
