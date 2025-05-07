@@ -1,6 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators.pre_login_locators import PreLoginLocators as Loc
+from selenium.common.exceptions import TimeoutException
 
 
 class PreLoginPage:
@@ -19,10 +20,26 @@ class PreLoginPage:
         except Exception:
             pass
 
+    def find_element(self, locator):
+        """Wait for and return a visible element."""
+        return self.wait.until(EC.visibility_of_element_located(locator))
+
+    def click_element(self, locator):
+        """Click on an element after ensuring it is visible."""
+        element = self.find_element(locator)
+        element.click()
+
     def select_country(self, country_name):
-        self.driver.find_element(*Loc.SELECT_PLACEHOLDER).click()
-        country_option = self.wait.until(EC.visibility_of_element_located(Loc.COUNTRY_OPTION(country_name)))
-        country_option.click()
+        self.click_element(Loc.SELECT_PLACEHOLDER)
+        self.click_element(Loc.COUNTRY_OPTION(country_name))
+
+    def verify_welcome_to_present(self):
+        """Return True if the country dropdown is visible, otherwise False."""
+        try:
+            self.find_element(Loc.WELCOME_TO)
+            return True
+        except TimeoutException:
+            return False
 
     def select_language(self, language):
         trigger = self.wait.until(EC.element_to_be_clickable(Loc.LANGUAGE_TRIGGER(language)))
