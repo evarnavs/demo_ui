@@ -102,6 +102,7 @@ Allure reports are automatically generated and published to **GitHub Pages** on 
 - XPath locators are centralized for maintainability.
 - Test trends are stored in the `history/` folder by Allure.
 - `.env` is excluded from version control via `.gitignore`.
+- Add Teardown with logout
 
 ---
 
