@@ -1,1 +1,1 @@
-[{"uid":"e8e9675c7e4a915f","name":"Full login flow works","time":{"start":1746612944561,"stop":1746612955165,"duration":10604},"status":"passed","severity":"normal"}]
+[{"uid":"1436da28230ca143","name":"Navigation options from register preview page work","time":{"start":1746618751751,"stop":1746618753486,"duration":1735},"status":"passed","severity":"normal"},{"uid":"7688088b0e3d942a","name":"Full login flow works","time":{"start":1746618743575,"stop":1746618751749,"duration":8174},"status":"passed","severity":"normal"}]
