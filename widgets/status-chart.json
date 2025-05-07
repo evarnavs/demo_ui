@@ -1,1 +1,1 @@
-[{"uid":"e5aae04446f84ac8","name":"Full login flow works","time":{"start":1746610536201,"stop":1746610545620,"duration":9419},"status":"passed","severity":"normal"}]
+[{"uid":"25cdf2e2ce2b9aa","name":"Full login flow works","time":{"start":1746611599014,"stop":1746611614638,"duration":15624},"status":"broken","severity":"normal"}]
