@@ -2,7 +2,7 @@
 
 This repository contains an automated UI testing framework using **Selenium**, **Pytest**, and **Allure** for the client platform.
 
-🔗 **Target URL:** [https://staging.usupport.online/client/](https://staging.usupport.online/client/)  
+🔗 **Target URL:
 📊 **Live Allure Report:** [https://evarnavs.github.io/demo_ui](https://evarnavs.github.io/demo_ui)
 
 ---
@@ -60,7 +60,7 @@ demo_ui/
 
 4. **Create `.env` file**:
    ```env
-   BASE_URL=https://staging.usupport.online
+   BASE_URL=env_url
    EMAIL=your@email.com
    PASSWORD=your_password
    ```
